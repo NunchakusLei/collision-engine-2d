@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/NunchakusLei/collision-engine-2d.git",
     packages=setuptools.find_packages(),
-    license="Apache"
+    license="Apache",
     classifiers=(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache License",
