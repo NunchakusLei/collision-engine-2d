@@ -1,0 +1,8 @@
+# Auto Generated Files
+__pycache__/
+*.swp
+*.pyc
+.DS_Store
+
+# Virtual Environment
+venv/
