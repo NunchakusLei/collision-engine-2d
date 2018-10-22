@@ -16,7 +16,9 @@ import math
     
 # GCD and LCM are not in math module.  
 # They are in gmpy, but these are simple enough:
-# Source: https://gist.github.com/endolith/114336/eff2dc13535f139d0d6a2db68597fad2826b53c3
+# Source: 
+# https://gist.github.com/endolith/114336/
+# eff2dc13535f139d0d6a2db68597fad2826b53c3
 # Aug 25th, 2018
 def gcd(a, b):
     """Compute the greatest common divisor of a and b"""
@@ -40,11 +42,9 @@ class Point2D:
         self.y = y
         
     def __eq__(self, other):
-        try:
+        if type(other) is Point2D:
             if self.x == other.x and self.y == other.y:
                 return True
-        except:
-            pass
         return False
         
     def __str__(self):
@@ -58,7 +58,28 @@ class Point2D:
         y = self.y + other.y
         return Point2D(x, y)
         
+    def __sub__(self, other):
+        x = self.x - other.x
+        y = self.y - other.y
+        return Point2D(x, y)
+        
+    def __mul__(self, other):
+        x = self.x * other
+        y = self.y * other
+        return Point2D(x, y)
+        
+    def __neg__(self):
+        x = -self.x
+        y = -self.y
+        return Point2D(x, y)
+        
     def find_distance(self, another_point):
+        if type(another_point) is not Point2D:
+            raise TypeError(
+                "Cannot find distance between '{:s}' and '{:}'".format(
+                    type(self).__name__, type(another_point).__name__
+                )
+            )
         return math.sqrt(
             (another_point.x - self.x)**2 + (another_point.y - self.y)**2
         )
@@ -212,20 +233,20 @@ class LineSegment2D(Line2D):
             
 class CollisionEngine2D:
     def point_line_collision(point, point_movement, line_segment, line_segment_movement):
-        point_moving_line_seg = LineSegment2D(point, point+point_movement)
+        point_moving_line_seg = LineSegment2D(point, point+point_movement-line_segment_movement)
         intersect_point = LineSegment2D.find_intersection(
             point_moving_line_seg, 
             line_segment
         )
-        moved_line_segment = LineSegment2D(
-            line_segment.point1+line_segment_movement,
-            line_segment.point2+line_segment_movement
-        )
-        intersect_point2 = LineSegment2D.find_intersection(
-            point_moving_line_seg, 
-            moved_line_segment
-        )
-        if intersect_point!=False or intersect_point2!=False:
+        # moved_line_segment = LineSegment2D(
+        #     line_segment.point1+line_segment_movement,
+        #     line_segment.point2+line_segment_movement
+        # )
+        # intersect_point2 = LineSegment2D.find_intersection(
+        #     point_moving_line_seg, 
+        #     moved_line_segment
+        # )
+        if intersect_point!=False:# or intersect_point2!=False:
             return True
         return False
         
