@@ -167,6 +167,15 @@ class Line2D:
             return True
         return False
 
+    def find_perpendicular(self, through_point):
+        a = -self.b
+        b = self.a
+        c = -(a*through_point.x + b*through_point.y)
+        return Line2D(a, b, c)
+
+    def find_distance(self, point):
+        return abs(self.a*point.x+self.b*point.y+self.c) / math.sqrt(self.a**2 + self.b**2)
+
     def find_intersection(self, another_line):
         if self.is_parallel(another_line):
             return False
