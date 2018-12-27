@@ -179,7 +179,8 @@ class Line2D:
     def find_intersection(self, another_line):
         if self.is_parallel(another_line):
             return False
-        if self.b != 0 and another_line.b != 0:
+        if self.b != 0 and not math.isclose(self.b, 0, rel_tol=1e-4) \
+        and another_line.b != 0 and not math.isclose(another_line.b, 0, rel_tol=1e-4):
             lowest_common_multiple = lcm(self.b, another_line.b)
             self_multipler = lowest_common_multiple / self.b
             another_multipler = lowest_common_multiple / another_line.b
@@ -187,7 +188,7 @@ class Line2D:
             x = x / (self_multipler * self.a - another_multipler * another_line.a)
             y = (self.a * x + self.c) / -self.b
         else:
-            if self.b == 0:
+            if self.b == 0 or math.isclose(self.b, 0, rel_tol=1e-4):
                 x = -self.c / self.a
                 y = -(another_line.a * x + another_line.c) / another_line.b
             else:
