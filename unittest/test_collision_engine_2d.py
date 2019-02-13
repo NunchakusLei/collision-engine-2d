@@ -17,6 +17,7 @@ sys.path.append("..") # Adds higher directory to python modules path.
 from collision_engine_2d import *
 import unittest
 import math
+import argparse
 
 class TestPoint2D(unittest.TestCase):
     # def __init__(self, testname, arg):
@@ -279,10 +280,19 @@ class TestCollisionEngine2D(unittest.TestCase):
         )
 
 
+def args_config(args_parser):
+    args_parser.add_argument('-d', '--show-details', required=False, action='store_true', help='Show details of testing.')
+
+
 if __name__ == "__main__":
     """
     Main function for testing
     """
+    # Parse test argument
+    ap = argparse.ArgumentParser()
+    args_config(ap)
+    args = ap.parse_args()
+
     # ### Simplest unit test
     # unittest.main()
 
@@ -309,5 +319,8 @@ if __name__ == "__main__":
         suite_line_segment2d,
         suite_collision_engine2d,
         ])
-    # unittest.TextTestRunner().run(suite)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+
+    if args.show_details:
+        unittest.TextTestRunner(verbosity=2).run(suite)  # Show help string and other details
+    else:
+        unittest.TextTestRunner(verbosity=0).run(suite)  # Quite when testing
