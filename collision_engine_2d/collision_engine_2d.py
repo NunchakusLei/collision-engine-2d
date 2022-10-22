@@ -15,6 +15,7 @@
 import math
 import cmath
 
+
 # GCD and LCM are not in math module.
 # They are in gmpy, but these are simple enough:
 # Source:
@@ -27,17 +28,17 @@ def gcd(a, b):
         a, b = b, a % b
     return a
 
+
 def lcm(a, b):
     """Compute the lowest common multiple of a and b"""
     return a * b / gcd(a, b)
 
 
-
-
 class Point2D:
     """
-    Mathmatical representation of 2D point: (x, y)
+    Mathematical representation of 2D point: (x, y)
     """
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -82,7 +83,7 @@ class Point2D:
                 )
             )
         return math.sqrt(
-            (another_point.x - self.x)**2 + (another_point.y - self.y)**2
+            (another_point.x - self.x) ** 2 + (another_point.y - self.y) ** 2
         )
 
     def rotate(self, theta, center=None):
@@ -104,7 +105,7 @@ class Point2D:
         # return pt_rotated + center
 
         # Source: http://effbot.org/zone/tkinter-complex-canvas.htm
-        cangle = cmath.exp(theta*1j)
+        cangle = cmath.exp(theta * 1j)
         offset = complex(center.x, center.y)
         v = cangle * (complex(self.x, self.y) - offset) + offset
         return Point2D(v.real, v.imag)
@@ -113,12 +114,11 @@ class Point2D:
         return math.sqrt(self.x**2 + self.y**2)
 
 
-
-
 class Line2D:
     """
-    Mathmatical representation of 2D line: a*x + b*y + c = 0
+    Mathematical representation of 2D line: a*x + b*y + c = 0
     """
+
     def __init__(self, a, b, c):
         self.a = a
         self.b = b
@@ -127,13 +127,13 @@ class Line2D:
     @classmethod
     def from_2_points(cls, point1, point2):
         if point1 == point2:
-            raise Exception('Cannot use two identical points to define a line.')
+            raise Exception("Cannot use two identical points to define a line.")
         x1, y1, x2, y2 = point1.x, point1.y, point2.x, point2.y
-        if x1==x2:
+        if x1 == x2:
             a, b, c = 1, 0, -x1
         else:
-            a = (y2 - y1)
-            b = - (x2 - x1)
+            a = y2 - y1
+            b = -(x2 - x1)
             c = (x2 - x1) * y1 - (y2 - y1) * x1
         return cls(a, b, c)
 
@@ -159,7 +159,7 @@ class Line2D:
 
     def is_perpendicular(self, another_line):
         if self.a != 0 and self.b != 0:
-            if another_line.b / self.a == - another_line.a / self.b:
+            if another_line.b / self.a == -another_line.a / self.b:
                 return True
         elif self.a == 0 and another_line.b == 0:
             return True
@@ -170,17 +170,23 @@ class Line2D:
     def find_perpendicular(self, through_point):
         a = -self.b
         b = self.a
-        c = -(a*through_point.x + b*through_point.y)
+        c = -(a * through_point.x + b * through_point.y)
         return Line2D(a, b, c)
 
     def find_distance(self, point):
-        return abs(self.a*point.x+self.b*point.y+self.c) / math.sqrt(self.a**2 + self.b**2)
+        return abs(self.a * point.x + self.b * point.y + self.c) / math.sqrt(
+            self.a**2 + self.b**2
+        )
 
     def find_intersection(self, another_line):
         if self.is_parallel(another_line):
             return False
-        if self.b != 0 and not math.isclose(self.b, 0, rel_tol=1e-4) \
-        and another_line.b != 0 and not math.isclose(another_line.b, 0, rel_tol=1e-4):
+        if (
+            self.b != 0
+            and not math.isclose(self.b, 0, rel_tol=1e-4)
+            and another_line.b != 0
+            and not math.isclose(another_line.b, 0, rel_tol=1e-4)
+        ):
             lowest_common_multiple = lcm(self.b, another_line.b)
             self_multipler = lowest_common_multiple / self.b
             another_multipler = lowest_common_multiple / another_line.b
@@ -198,8 +204,6 @@ class Line2D:
         return Point2D(x, y)
 
 
-
-
 class LineSegment2D(Line2D):
     def __init__(self, point1, point2):
         temp_line = Line2D.from_2_points(point1, point2)
@@ -208,41 +212,66 @@ class LineSegment2D(Line2D):
         self.point2 = point2
 
     def __str__(self):
-        return "Line2D(%dx + %dy + %d = 0) " % (self.a, self.b, self.c)+str(self.point1)+" "+str(self.point2)
+        return (
+            "Line2D(%dx + %dy + %d = 0) " % (self.a, self.b, self.c)
+            + str(self.point1)
+            + " "
+            + str(self.point2)
+        )
 
     def __repr__(self):
         return self.__str__()
 
     def find_intersection(self, another_line_segment):
         intersect_point = Line2D.find_intersection(self, another_line_segment)
-        if intersect_point!=False:
+        if intersect_point != False:
             xmax = max(self.point1.x, self.point2.x)
             xmin = min(self.point1.x, self.point2.x)
             ymax = max(self.point1.y, self.point2.y)
             ymin = min(self.point1.y, self.point2.y)
 
-            if (intersect_point.x <= xmax or \
-            math.isclose(intersect_point.x, xmax, rel_tol=1e-4)) \
-            and (intersect_point.x >= xmin or \
-            math.isclose(intersect_point.x, xmin, rel_tol=1e-4)) \
-            and (intersect_point.y <= ymax or \
-            math.isclose(intersect_point.y, ymax, rel_tol=1e-4)) \
-            and (intersect_point.y >= ymin or \
-            math.isclose(intersect_point.y, ymin, rel_tol=1e-4)) :
+            if (
+                (
+                    intersect_point.x <= xmax
+                    or math.isclose(intersect_point.x, xmax, rel_tol=1e-4)
+                )
+                and (
+                    intersect_point.x >= xmin
+                    or math.isclose(intersect_point.x, xmin, rel_tol=1e-4)
+                )
+                and (
+                    intersect_point.y <= ymax
+                    or math.isclose(intersect_point.y, ymax, rel_tol=1e-4)
+                )
+                and (
+                    intersect_point.y >= ymin
+                    or math.isclose(intersect_point.y, ymin, rel_tol=1e-4)
+                )
+            ):
 
                 xmax = max(another_line_segment.point1.x, another_line_segment.point2.x)
                 xmin = min(another_line_segment.point1.x, another_line_segment.point2.x)
                 ymax = max(another_line_segment.point1.y, another_line_segment.point2.y)
                 ymin = min(another_line_segment.point1.y, another_line_segment.point2.y)
 
-                if (intersect_point.x <= xmax or \
-                math.isclose(intersect_point.x, xmax, rel_tol=1e-4)) \
-                and (intersect_point.x >= xmin or \
-                math.isclose(intersect_point.x, xmin, rel_tol=1e-4)) \
-                and (intersect_point.y <= ymax or \
-                math.isclose(intersect_point.y, ymax, rel_tol=1e-4)) \
-                and (intersect_point.y >= ymin or \
-                math.isclose(intersect_point.y, ymin, rel_tol=1e-4)) :
+                if (
+                    (
+                        intersect_point.x <= xmax
+                        or math.isclose(intersect_point.x, xmax, rel_tol=1e-4)
+                    )
+                    and (
+                        intersect_point.x >= xmin
+                        or math.isclose(intersect_point.x, xmin, rel_tol=1e-4)
+                    )
+                    and (
+                        intersect_point.y <= ymax
+                        or math.isclose(intersect_point.y, ymax, rel_tol=1e-4)
+                    )
+                    and (
+                        intersect_point.y >= ymin
+                        or math.isclose(intersect_point.y, ymin, rel_tol=1e-4)
+                    )
+                ):
                     return intersect_point
         return False
 
@@ -268,7 +297,6 @@ class LineSegment2D(Line2D):
 #             return (x, y)
 
 
-
 class GeomatricObject:
     """Object representation in 2D"""
 
@@ -286,15 +314,18 @@ class GeomatricObject:
         self.movement = Point2D(0, 0)
 
 
-
 class CollisionEngine2D:
-    def point_line_collision(point, point_movement, line_segment, line_segment_movement):
-        if (point_movement-line_segment_movement) == Point2D(0, 0):
+    @staticmethod
+    def point_line_collision(
+        point, point_movement, line_segment, line_segment_movement
+    ):
+        if (point_movement - line_segment_movement) == Point2D(0, 0):
             return False
-        point_moving_line_seg = LineSegment2D(point, point+point_movement-line_segment_movement)
+        point_moving_line_seg = LineSegment2D(
+            point, point + point_movement - line_segment_movement
+        )
         intersect_point = LineSegment2D.find_intersection(
-            point_moving_line_seg,
-            line_segment
+            point_moving_line_seg, line_segment
         )
         # moved_line_segment = LineSegment2D(
         #     line_segment.point1+line_segment_movement,
@@ -304,7 +335,7 @@ class CollisionEngine2D:
         #     point_moving_line_seg,
         #     moved_line_segment
         # )
-        if intersect_point!=False:# or intersect_point2!=False:
+        if intersect_point:  # or intersect_point2!=False:
             return True
         return False
 

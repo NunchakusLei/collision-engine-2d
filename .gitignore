@@ -3,6 +3,7 @@ __pycache__/
 *.swp
 *.pyc
 .DS_Store
+collision_engine_2d.egg-info/
 
 # Virtual Environment
 venv/
