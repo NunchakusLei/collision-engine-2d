@@ -319,7 +319,7 @@ class CollisionEngine2D:
     def point_line_collision(
         point, point_movement, line_segment, line_segment_movement
     ):
-        if (point_movement - line_segment_movement) == Point2D(0, 0):
+        if point == point + point_movement - line_segment_movement:
             return False
         point_moving_line_seg = LineSegment2D(
             point, point + point_movement - line_segment_movement
