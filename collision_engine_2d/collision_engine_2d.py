@@ -1,4 +1,4 @@
-# Copyright (c) 2018 Chenrui Lei
+# Copyright (c) 2018-2022 Chenrui Lei
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -188,10 +188,10 @@ class Line2D:
             and not math.isclose(another_line.b, 0, rel_tol=1e-4)
         ):
             lowest_common_multiple = lcm(self.b, another_line.b)
-            self_multipler = lowest_common_multiple / self.b
-            another_multipler = lowest_common_multiple / another_line.b
-            x = another_multipler * another_line.c - self_multipler * self.c
-            x = x / (self_multipler * self.a - another_multipler * another_line.a)
+            self_multiplier = lowest_common_multiple / self.b
+            another_multiplier = lowest_common_multiple / another_line.b
+            x = another_multiplier * another_line.c - self_multiplier * self.c
+            x = x / (self_multiplier * self.a - another_multiplier * another_line.a)
             y = (self.a * x + self.c) / -self.b
         else:
             if self.b == 0 or math.isclose(self.b, 0, rel_tol=1e-4):
@@ -224,7 +224,7 @@ class LineSegment2D(Line2D):
 
     def find_intersection(self, another_line_segment):
         intersect_point = Line2D.find_intersection(self, another_line_segment)
-        if intersect_point != False:
+        if intersect_point is not False:
             xmax = max(self.point1.x, self.point2.x)
             xmin = min(self.point1.x, self.point2.x)
             ymax = max(self.point1.y, self.point2.y)
@@ -292,28 +292,7 @@ class LineSegment2D(Line2D):
         return False
 
 
-# class Line2D:
-#     # def __init__(slop, shift):
-#     #     self.slop = slop
-#     #     self.yshift = yshift
-#     def __init__(self, x1, y1, x2, y2):
-#         if x1 == x2:
-#             self.slop = None
-#             self.shift = x1
-#         else:
-#             self.slop = (y1 - y2) / (x1 - x2)
-#             self.shift = y1 - x1 * self.slop
-#
-#     def intercetWith(self, line):
-#         if self.slop == line.slop and self.shift == line.shift:
-#             return 'any'
-#         else:
-#             x = (line.shift - self.shift) / (self.slop - line.slop)
-#             y = x * self.slop + self.shift
-#             return (x, y)
-
-
-class GeomatricObject:
+class GeometricObject:
     """Object representation in 2D"""
 
     def __init__(self, vertex, edges):
