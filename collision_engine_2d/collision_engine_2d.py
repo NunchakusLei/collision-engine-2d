@@ -233,19 +233,27 @@ class LineSegment2D(Line2D):
             if (
                 (
                     intersect_point.x <= xmax
-                    or math.isclose(intersect_point.x, xmax, rel_tol=1e-4)
+                    or math.isclose(
+                        intersect_point.x, xmax, rel_tol=1e-4, abs_tol=1e-10
+                    )
                 )
                 and (
                     intersect_point.x >= xmin
-                    or math.isclose(intersect_point.x, xmin, rel_tol=1e-4)
+                    or math.isclose(
+                        intersect_point.x, xmin, rel_tol=1e-4, abs_tol=1e-10
+                    )
                 )
                 and (
                     intersect_point.y <= ymax
-                    or math.isclose(intersect_point.y, ymax, rel_tol=1e-4)
+                    or math.isclose(
+                        intersect_point.y, ymax, rel_tol=1e-4, abs_tol=1e-10
+                    )
                 )
                 and (
                     intersect_point.y >= ymin
-                    or math.isclose(intersect_point.y, ymin, rel_tol=1e-4)
+                    or math.isclose(
+                        intersect_point.y, ymin, rel_tol=1e-4, abs_tol=1e-10
+                    )
                 )
             ):
 
@@ -257,19 +265,27 @@ class LineSegment2D(Line2D):
                 if (
                     (
                         intersect_point.x <= xmax
-                        or math.isclose(intersect_point.x, xmax, rel_tol=1e-4)
+                        or math.isclose(
+                            intersect_point.x, xmax, rel_tol=1e-4, abs_tol=1e-10
+                        )
                     )
                     and (
                         intersect_point.x >= xmin
-                        or math.isclose(intersect_point.x, xmin, rel_tol=1e-4)
+                        or math.isclose(
+                            intersect_point.x, xmin, rel_tol=1e-4, abs_tol=1e-10
+                        )
                     )
                     and (
                         intersect_point.y <= ymax
-                        or math.isclose(intersect_point.y, ymax, rel_tol=1e-4)
+                        or math.isclose(
+                            intersect_point.y, ymax, rel_tol=1e-4, abs_tol=1e-10
+                        )
                     )
                     and (
                         intersect_point.y >= ymin
-                        or math.isclose(intersect_point.y, ymin, rel_tol=1e-4)
+                        or math.isclose(
+                            intersect_point.y, ymin, rel_tol=1e-4, abs_tol=1e-10
+                        )
                     )
                 ):
                     return intersect_point
